@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jakub Grabik – Fotograf i Filmowiec</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #1e1e1e;
+      color: #fff;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: #f4b400;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      position: relative;
+      background: url('https://i.imgur.com/Tb8LL4e.jpeg') no-repeat center center/cover;
+      height: 100vh;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.6);
+      background-blend-mode: multiply;
+      padding: 20px;
+    }
+
+    header h1 {
+      font-size: 3em;
+      margin: 0;
+    }
+
+    header p {
+      font-size: 1.5em;
+      margin: 10px 0;
+    }
+
+    .btn {
+      background-color: #f4b400;
+      color: #1e1e1e;
+      padding: 12px 24px;
+      display: inline-block;
+      margin-top: 20px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .scroll-down {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 3rem;
+      color: #f4b400;
+      text-decoration: none;
+      animation: bounce 2s infinite;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .scroll-down:hover {
+      transform: translateX(-50%) scale(1.2);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, 10px); }
+    }
+
+    section {
+      margin-bottom: 60px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    h2 {
+      color: #f4b400;
+      border-bottom: 2px solid #333;
+      padding-bottom: 10px;
+    }
+
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .gallery img {
+      width: calc(33.333% - 10px);
+      border-radius: 4px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #aaa;
+    }
+
+    #flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: white;
+      opacity: 0;
+      z-index: 9998;
+      pointer-events: none;
+      animation: flash 1s ease-in-out forwards;
+    }
+
+    #camera-icon {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      opacity: 0;
+      z-index: 9999;
+      animation: camera-pop 1s ease-in-out forwards;
+    }
+
+    @keyframes flash {
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      100% { opacity: 0; display: none; }
+    }
+
+    @keyframes camera-pop {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+      30% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      70% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    }
+
+    .job {
+      border-left: 3px solid #f4b400;
+      padding-left: 15px;
+      margin-bottom: 25px;
+    }
+
+    .job h3 {
+      margin: 0;
+      font-size: 1.2em;
+      color: #f4b400;
+    }
+
+    .job p {
+      margin: 5px 0 0;
+      line-height: 1.4em;
+    }
+
+    .about-box {
+      background-color: #2b2b2b;
+      padding: 25px;
+      border-left: 4px solid #f4b400;
+      border-radius: 6px;
+      line-height: 1.6;
+    }
+
+    .about-box ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 10px 0 20px;
+    }
+
+    .about-box li {
+      margin-bottom: 8px;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .skill {
+      background-color: #2b2b2b;
+      border-left: 4px solid #f4b400;
+      padding: 15px 20px;
+      border-radius: 6px;
+      font-size: 1em;
+      font-weight: 500;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.3s ease;
+    }
+
+    .skill:hover {
+      background-color: #3a3a3a;
+    }
+
+    @media (max-width: 768px) {
+      .gallery img {
+        width: 100%;
+      }
+
+      header {
+        padding-left: 20px;
+      }
+
+      header h1 {
+        font-size: 2.2em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="flash"></div>
+<div id="camera-icon">
+  <svg width="64" height="64" viewBox="0 0 24 24" fill="#1e1e1e">
+    <path d="M12 17a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm8-11h-3.17l-1.41-1.41A2 2 0 0 0 13.17 4h-2.34a2 2 0 0 0-1.41.59L8 6H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"/>
+  </svg>
+</div>
+
+<audio id="shutter-sound" src="shutter.mp3" preload="auto"></audio>
+
+<header>
+  <div class="hero-content">
+    <h1>Jakub Grabik</h1>
+    <p>Fotograf, Filmowiec i Montażysta</p>
+    <a href="https://drive.google.com/your-cv-link" target="_blank" class="btn">📄 Pobierz moje CV</a>
+  </div>
+  <a href="#about" id="scrollToAbout" class="scroll-down">↓</a>
+</header>
+
+<div class="container">
+
+  <section id="about">
+    <h2>O mnie</h2>
+    <div class="about-box">
+      <p><strong>Od 2019 roku</strong> pracuję jako fotograf i twórca wideo. Realizuję:</p>
+      <ul>
+        <li>🎥 <strong>Spoty reklamowe</strong> i filmy promocyjne</li>
+        <li>📸 <strong>Reportaże</strong> z eventów i wydarzeń</li>
+        <li>📱 <strong>Content do social mediów</strong> – szybki, dynamiczny montaż</li>
+      </ul>
+      <p>
+        Pracuję <strong>sprawnie i niezależnie</strong>, również pod presją czasu. Reżyseruję ujęcia, organizuję plany zdjęciowe i tworzę projekty kompleksowo.
+      </p>
+      <p>
+        Na co dzień korzystam z <strong>Adobe Premiere, Lightroom, Photoshop</strong> oraz <strong>DaVinci Resolve</strong>. Mam doświadczenie zarówno w produkcjach <strong>komercyjnych</strong>, jak i freelansowych.
+      </p>
+    </div>
+  </section>
+
+  <section id="portfolio">
+    <h2>Portfolio</h2>
+    <div class="gallery">
+      <img src="portfolio1.jpg" alt="Projekt 1">
+      <img src="portfolio2.jpg" alt="Projekt 2">
+      <img src="portfolio3.jpg" alt="Projekt 3">
+    </div>
+  </section>
+
+  <section id="experience">
+    <h2>Doświadczenie</h2>
+
+    <div class="job">
+      <h3>Impuls-Biznes</h3>
+      <p><strong>2025–obecnie</strong><br>Fotograf, Filmowiec, Montażysta</p>
+    </div>
+
+    <div class="job">
+      <h3>MattMedia Polska</h3>
+      <p><strong>2023–2025</strong><br>Operator kamery, Fotograf, Montażysta</p>
+    </div>
+
+    <div class="job">
+      <h3>Zlecenia – Mazury</h3>
+      <p><strong>2022–2024</strong><br>Fotoreporter na obozach</p>
+    </div>
+
+    <div class="job">
+      <h3>Have Fun & Event Boat</h3>
+      <p><strong>2019</strong><br>Fotograf i Specjalista Social Media</p>
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2>Umiejętności</h2>
+    <div class="skills-grid">
+      <div class="skill">🎬 Reżyseria ujęć</div>
+      <div class="skill">🎥 Operowanie kamerą w ruchu</div>
+      <div class="skill">🎵 Montaż z wykorzystaniem rytmu muzyki</div>
+      <div class="skill">🖌️ Retusz portretowy high-end</div>
+      <div class="skill">🤝 Praca z klientem na planie</div>
+      <div class="skill">📋 Organizacja planu zdjęciowego od A do Z</div>
+      <div class="skill">📼 Efektywna praca z materiałem 4K</div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Kontakt</h2>
+    <p><strong>Email:</strong> <a href="mailto:grabikjakub@gmail.com">grabikjakub@gmail.com</a></p>
+    <p><strong>Telefon:</strong> <a href="tel:+48570370940">+48 570 370 940</a></p>
+    <p><strong>Instagram:</strong> <a href="https://www.instagram.com/jpg_bo_czemu_nie/" target="_blank">@jpg_bo_czemu_nie</a></p>
+    <p><strong>Useme:</strong> <a href="https://useme.com/pl/roles/contractor/ppfp,311135/" target="_blank">Mój profil</a></p>
+  </section>
+
+</div>
+
+<footer>
+  © 2025 Jakub Grabik. Wszystkie prawa zastrzeżone.
+</footer>
+
+<script>
+  document.getElementById('scrollToAbout').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector('#about').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  const sections = document.querySelectorAll('section');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  sections.forEach(section => observer.observe(section));
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const audio = document.getElementById('shutter-sound');
+    audio.volume = 0.6;
+    setTimeout(() => {
+      audio.play().catch(() => {});
+    }, 300);
+  });
+</script>
+
+</body>
+</html>
